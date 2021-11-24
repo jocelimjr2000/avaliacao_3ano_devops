@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+
+    database:
+        image: mariadb:10.6.3
+        container_name: database
+        restart: always
+        ports:
+            - 3306:3306
+        networks:
+            - project_network
+        volumes:
+            - volDatabase:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+
+    appbackend:
+        build: ./backend
+        image: openjdk
+        container_name: appbackend
+        ports:
+            - 9999:9999
+        networks:
+            - project_network
+        volumes:
+            - ./backend/createuser-0.0.1-SNAPSHOT.jar:/app.jar
+        environment:
+            DBHOST: database
+            DBNAME: avaliacao
+            DBPORT: 3306
+            DBUSER: root
+            DBPASS: root
+
+networks:
+    project_network:
+        driver: bridge
+        external: true
+
+volumes:
+    volDatabase:
+        external: false
