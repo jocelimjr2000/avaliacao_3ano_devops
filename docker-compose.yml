@@ -32,6 +32,15 @@ services:
             DBUSER: root
             DBPASS: root
 
+    appfrontend:
+        build: ./frontend
+        image: flutter
+        container_name: appfrontend
+        ports:
+            - 4040:4040
+        networks:
+            - project_network
+
 networks:
     project_network:
         driver: bridge
